@@ -1,21 +1,16 @@
 import os
-from datatime import datetime
+
+from pydantic_ai.models.openai import _history_hasher
+from datetime import datetime
 
 from pydantic_ai import Agent
 from pydantic_ai.models.ollama import OllamaModel
 from pydantic_ai.providers.ollama import OllamaProvider
-from ollama import chat
 
 model = OllamaModel(
     "qwen3.5:2b",
     provider = OllamaProvider(base_url = "http://localhost:11434/v1")
 )
-
-response = chat(
-    model='phonon',
-    messages=[{'role': 'user', 'content': 'Hello!'}],
-)
-print(response.message.content)
 
 NOTES_FILE = "notes.txt"
 
@@ -40,4 +35,28 @@ def read_notes() -> str:
         return "No notes saved yet!"
     with open(NOTES_FILE, encoding="utf-8")as file:
         return file.read()
-    
+
+
+agent = Agent(
+    model,
+    tools = [get_current_time, calculation, save_note, read_notes],
+    instructions=(
+        "You are a helpful personal assistant running 100% locally."
+        "Use your tools whenever they can help answer the question."
+        "Keep your answer short and friendly."
+    )
+)
+
+def main():
+    print("Local agent ready! Type 'quit' to exit. \n")
+    history = []
+    while True:
+        user_input = input("You: ")
+        if user_input.strip().lower() in ("quit","exit"):
+            break
+        result = agent.run_sync(user_input, message_history=history)
+        history = result.all_messages()
+        print(f"\n Agent: {result.output}\n")
+
+if __name__ == "__main__":
+    main()
