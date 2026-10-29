@@ -6,6 +6,7 @@ client = OpenAI(
     api_key="ollama",  # Required by the client; Ollama runs locally.
 )
 
+def speak():
 with client.audio.speech.with_streaming_response.create(
     model="phonon",
     voice="default",

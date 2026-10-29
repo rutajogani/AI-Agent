@@ -1,5 +1,6 @@
 import os
 
+from speech-to-text import listen
 from pydantic_ai.models.openai import _history_hasher
 from datetime import datetime
 
@@ -51,7 +52,9 @@ def main():
     print("Local agent ready! Type 'quit' to exit. \n")
     history = []
     while True:
-        user_input = input("You: ")
+        print("You: ")
+        # user_input = input("You: ")
+        user_input = listen()
         if user_input.strip().lower() in ("quit","exit"):
             break
         result = agent.run_sync(user_input, message_history=history)

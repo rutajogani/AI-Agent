@@ -10,7 +10,9 @@ requires-python = ">=3.9"
 dependencies = [
     "openai>=2.48.0",
     "pydantic-ai>=0.8.1",
+    "pyttsx3>=2.99",
     "sounddevice>=0.5.6",
+    "speechrecognition>=3.17.0",
 ]
 
 [project.scripts]
