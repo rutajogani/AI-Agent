@@ -7,16 +7,16 @@ client = OpenAI(
 )
 
 def speak():
-with client.audio.speech.with_streaming_response.create(
-    model="phonon",
-    voice="default",
-    input="Hello! Phonon is speaking directly from Python.",
-    response_format="pcm",
-) as response:
-    with sd.RawOutputStream(
-        samplerate=24000,
-        channels=1,
-        dtype="int16",
-    ) as audio:
-        for chunk in response.iter_bytes(chunk_size=4096):
-            audio.write(chunk)
+    with client.audio.speech.with_streaming_response.create(
+        model="phonon",
+        voice="default",
+        input="Hello! Phonon is speaking directly from Python.",
+        response_format="pcm",
+    ) as response:
+        with sd.RawOutputStream(
+            samplerate=24000,
+            channels=1,
+            dtype="int16",
+        ) as audio:
+            for chunk in response.iter_bytes(chunk_size=4096):
+                audio.write(chunk)
