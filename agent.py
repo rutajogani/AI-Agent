@@ -1,31 +1,30 @@
 import os
 
-from speech-to-text import listen
-from pydantic_ai.models.openai import _history_hasher
+from speech_to_text import listen
 from datetime import datetime
 
 from pydantic_ai import Agent
-from pydantic_ai.models.ollama import OllamaModel
+from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.ollama import OllamaProvider
 
-model = OllamaModel(
+model = OpenAIChatModel(
     "qwen3.5:2b",
-    provider = OllamaProvider(base_url = "http://localhost:11434/v1")
+    provider=OllamaProvider(base_url="http://localhost:11434/v1"),
 )
 
 NOTES_FILE = "notes.txt"
 
-def get_current_time() -> str: 
+def get_current_time() -> str:
     return datetime.now().strftime("%A, %B, %d, %Y at %I:%M  %p")
 
-def calculation(expression: str) -> str: 
+def calculation(expression: str) -> str:
     if not set(expression) <= set("0123456789+-*/(). "):
         return "Error : Only Number and + - * / () are allowed"
     try:
         return str(eval(expression))
     except Exception as error:
         return f"Error: {error}"
-        
+
 def save_note(note:  str) -> str:
     with open(NOTES_FILE, "a", encoding="utf-8")as file:
         file.write(f"- {note}\n")
@@ -53,8 +52,8 @@ def main():
     history = []
     while True:
         print("You: ")
-        # user_input = input("You: ")
-        user_input = listen()
+        user_input = input("You: ")
+        # user_input = listen()
         if user_input.strip().lower() in ("quit","exit"):
             break
         result = agent.run_sync(user_input, message_history=history)

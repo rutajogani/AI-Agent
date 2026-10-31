@@ -9,7 +9,9 @@ authors = [
 requires-python = ">=3.9"
 dependencies = [
     "openai>=2.48.0",
+    "pydantic>=2.13.5",
     "pydantic-ai>=0.8.1",
+    "pydantic-ai-slim[openai]>=0.8.1",
     "pyttsx3>=2.99",
     "sounddevice>=0.5.6",
     "speechrecognition>=3.17.0",
